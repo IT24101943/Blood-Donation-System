@@ -1,255 +1,616 @@
-<!-- doctor.html (Dashboard) - Fully Functional with JS for Dynamics -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BloodLink - Doctor Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-red: #C8102E;
-            --secondary-blue: #007BFF;
-            --bg-light: #F8F9FA;
-            --text-dark: #212529;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
         }
-        body { background-color: var(--bg-light); color: var(--text-dark); font-family: 'Roboto', sans-serif; }
-        .navbar { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .sidebar { background-color: white; border-right: 1px solid #dee2e6; height: 100vh; position: fixed; width: 250px; padding: 1rem; overflow-y: auto; }
-        .main-content { margin-left: 250px; padding: 2rem; }
-        .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
-        .blood-drop { animation: drop 2s infinite; }
-        @keyframes drop { 0% { transform: translateY(0); } 50% { transform: translateY(10px); } 100% { transform: translateY(0); } }
-        .heartbeat { animation: heartbeat 1.5s infinite; }
-        @keyframes heartbeat { 0% { transform: scale(1); } 20% { transform: scale(1.1); } 40% { transform: scale(1); } }
-        .animate__fadeIn { animation-duration: 1s; }
-        .btn-primary { background-color: var(--primary-red); border-color: var(--primary-red); }
-        .btn-primary:hover { background-color: #a50d26; }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            color: #333;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInBody 1s ease-out forwards;
+        }
+
+        @keyframes fadeInBody {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            background: linear-gradient(90deg, #8B0000, #B22222);
+            color: #fff;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: slideInHeader 0.8s ease-out forwards;
+        }
+
+        @keyframes slideInHeader {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(0); }
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #2C2C2C;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: #FF9999;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
+        }
+
+        nav a:hover, nav a.active {
+            color: #FF9999;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            animation: slideInSection 0.8s ease-out forwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.2s; }
+        .section:nth-child(2) { animation-delay: 0.4s; }
+        .section:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes slideInSection {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .section h2 {
+            color: #8B0000;
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .section h3 {
+            color: #333;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: #fff;
+        }
+
+        table th, table td {
+            border: 1px solid #e0e0e0;
+            padding: 0.75rem;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        table th {
+            background: linear-gradient(90deg, #8B0000, #B22222);
+            color: #fff;
+            font-weight: 500;
+        }
+
+        table tbody tr {
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        table tbody tr:hover {
+            background: #FFF5F5;
+            transform: translateX(5px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #8B0000;
+            box-shadow: 0 0 8px rgba(139, 0, 0, 0.2);
+            outline: none;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #8B0000, #B22222);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.4s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .error-message {
+            color: #D32F2F;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        footer {
+            background: linear-gradient(90deg, #2C2C2C, #3C3C3C);
+            color: #fff;
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            animation: fadeInFooter 1s ease-out forwards;
+        }
+
+        @keyframes fadeInFooter {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        footer a {
+            color: #FF9999;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+        footer .quick-links, footer .contact {
+            margin: 1rem 0;
+        }
+
+        footer .quick-links a {
+            margin: 0 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            header p {
+                font-size: 0.9rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 1rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            table th, table td {
+                padding: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .form-group input, .form-group select, .form-group textarea {
+                font-size: 0.85rem;
+            }
+        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="sidebar">
-    <h4 class="text-center mb-4">BloodLink</h4>
-    <ul class="nav flex-column">
-        <li class="nav-item"><a href="doctor.html" class="nav-link active"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a></li>
-        <li class="nav-item"><a href="appointments.html" class="nav-link"><i class="fas fa-calendar-check me-2"></i> Appointments</a></li>
-        <li class="nav-item"><a href="donors.html" class="nav-link"><i class="fas fa-users me-2"></i> Donors</a></li>
-        <li class="nav-item"><a href="reports.html" class="nav-link"><i class="fas fa-chart-bar me-2"></i> Reports</a></li>
-    </ul>
-    <hr>
-    <div class="dropdown">
-        <a href="#" class="d-flex align-items-center nav-link dropdown-toggle" data-bs-toggle="dropdown">
-            <img src="https://img.freepik.com/premium-photo/3d-female-doctor-with-glasses-stethoscope_313242-1869.jpg" class="img-fluid rounded-circle me-2" alt="Profile" style="width: 40px; height: 40px; object-fit: cover;">
-            Dr. Shanika Jayawardena
-        </a>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
-            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
-            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
-        </ul>
+<header>
+    <h1>BloodLink - Doctor Dashboard</h1>
+    <p>Professional Blood Donation Management</p>
+    <p>Emergency: 1-800-BLOOD | 24/7 Available</p>
+</header>
+
+<nav>
+    <a href="#dashboard" class="active">Dashboard</a>
+    <a href="#health-reports">Health Reports</a>
+    <a href="#donor-history">Donor History</a>
+    <a href="#" onclick="logout()">Logout</a>
+</nav>
+
+<div class="container">
+    <div class="section dashboard" id="dashboard">
+        <h2>Welcome, Dr. [Doctor Name]</h2>
+        <p>Manage donor health reports, approve/reject donations, and view donor history securely and efficiently.</p>
     </div>
-</div>
 
-<div class="main-content animate__animated animate__fadeIn">
-    <div class="container-fluid">
-        <div class="row mb-4">
-            <div class="col">
-                <h2 class="heartbeat">Welcome, Dr. Shanika Jayawardena <i class="fas fa-heart text-danger ms-2"></i></h2>
-                <p>Manage donor evaluations, approvals, and medical records efficiently.</p>
+    <div class="section" id="health-reports">
+        <h2>Health Reports</h2>
+        <table id="health-reports-table">
+            <thead>
+            <tr>
+                <th>Donor NIC</th>
+                <th>Blood Pressure</th>
+                <th>Weight</th>
+                <th>Diseases</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Populated by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <h3>Review Donation</h3>
+            <div class="form-group">
+                <label for="donor-nic">Donor NIC</label>
+                <input type="text" id="donor-nic" placeholder="Enter Donor NIC (e.g., 123456789V)">
+                <div id="donor-nic-error" class="error-message">Please enter a valid NIC (e.g., 123456789V or 123456789012).</div>
             </div>
-        </div>
 
-        <div class="row mb-4">
-            <div class="col-md-3"><div class="card text-center p-3 blood-drop"><i class="fas fa-clock fa-2x text-primary mb-2"></i><h5>Pending Approvals</h5></div></div>
-            <div class="col-md-3"><div class="card text-center p-3"><i class="fas fa-users fa-2x text-success mb-2"></i><h5>View Donors</h5></div></div>
-            <div class="col-md-3"><div class="card text-center p-3"><i class="fas fa-history fa-2x text-warning mb-2"></i><h5>Donation History</h5></div></div>
-            <div class="col-md-3"><div class="card text-center p-3"><i class="fas fa-notes-medical fa-2x text-danger mb-2"></i><h5>Add Medical Notes</h5></div></div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header"><h5>Pending Donation Appointments</h5></div>
-                    <div class="card-body">
-                        <table class="table table-hover" id="pendingTable">
-                            <thead><tr><th>Donor Name</th><th>Blood Type</th><th>Appointment Date</th><th>Actions</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label for="decision">Decision</label>
+                <select id="decision">
+                    <option value="Approve">Approve</option>
+                    <option value="Reject">Reject</option>
+                </select>
             </div>
-        </div>
 
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body" id="donorProfiles"></div>
-                </div>
+            <div class="form-group">
+                <label for="doctor-notes">Doctor Notes</label>
+                <textarea id="doctor-notes" rows="4" placeholder="Enter medical notes (e.g., Low hemoglobin, rest for 3 months)"></textarea>
+                <div id="doctor-notes-error" class="error-message">Notes cannot exceed 500 characters.</div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header"><h5>Add Medical Notes</h5></div>
-                    <div class="card-body">
-                        <form id="notesForm">
-                            <div class="mb-3">
-                                <label for="donorSelect" class="form-label">Select Donor</label>
-                                <select class="form-select" id="donorSelect"></select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="notes" class="form-label">Notes</label>
-                                <textarea class="form-control" id="notes" rows="3"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save Notes</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <button class="btn" onclick="submitDecision()">Submit Decision</button>
+        </div>
+    </div>
+
+    <div class="section" id="donor-history">
+        <h2>Donor History</h2>
+        <div class="form-group">
+            <label for="search-nic">Search Donor by NIC</label>
+            <input type="text" id="search-nic" placeholder="Enter Donor NIC">
+            <div id="search-nic-error" class="error-message">Please enter a valid NIC (e.g., 123456789V or 123456789012).</div>
+            <button class="btn" onclick="searchDonor()">Search</button>
+        </div>
+        <div id="donor-profile">
+            <!-- Populated by JavaScript -->
         </div>
     </div>
 </div>
 
-<footer class="text-center py-3 mt-4" style="background-color: white; border-top: 1px solid #dee2e6;">
-    © 2025 BloodLink. All rights reserved. | Saving lives through technology.
+<footer>
+    <div class="container">
+        <h3>BloodLink</h3>
+        <p>Professional blood donation management system connecting donors with healthcare institutions to save lives through advanced medical technology and NIC-based security.</p>
+
+        <div class="quick-links">
+            <h4>Quick Links</h4>
+            <a href="#">About Us</a> |
+            <a href="#">Donation Process</a> |
+            <a href="#">Find Blood Bank</a> |
+            <a href="#">Emergency</a>
+        </div>
+
+        <div class="contact">
+            <h4>Contact</h4>
+            <p>1-800-BLOOD-24</p>
+            <p>support@bloodlink.org</p>
+            <p>Medical District, Health City</p>
+        </div>
+
+        <p>© BloodLink Professional Blood Management System. All rights reserved. | Saving lives through technology.</p>
+    </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script>
-    // Shared data management
-    function initData() {
-        if (!localStorage.getItem('bloodLinkData')) {
-            const data = {
-                donors: [
-                    { name: 'Chamika Aluthgama', bloodType: 'O+', notes: [], history: [] },
-                    { name: 'Example Donor', bloodType: 'A-', notes: [], history: [] },
-                    { name: 'Another Donor', bloodType: 'B+', notes: [], history: [] }
-                ],
-                appointments: [
-                    { id: 1, donorName: 'Chamika Aluthgama', bloodType: 'O+', date: '2025-08-25', status: 'pending', healthReport: 'Good' },
-                    { id: 2, donorName: 'Example Donor', bloodType: 'A-', date: '2025-08-20', status: 'approved' },
-                    { id: 3, donorName: 'Another Donor', bloodType: 'B+', date: '2025-08-15', status: 'rejected', reason: 'Health Issues' }
-                ]
-            };
-            localStorage.setItem('bloodLinkData', JSON.stringify(data));
+    // Mock database (replace with actual API/database integration)
+    const healthReports = [
+        { nic: "123456789V", bp: "120/80", weight: "70kg", diseases: "None", status: "Pending", notes: "" },
+        { nic: "987654321V", bp: "130/85", weight: "65kg", diseases: "Diabetes", status: "Pending", notes: "" }
+    ];
+
+    const donationHistory = [
+        { nic: "123456789V", date: "2025-08-10", type: "A+", volume: "450ml", notes: "Healthy donation" },
+        { nic: "123456789V", date: "2025-06-15", type: "A+", volume: "450ml", notes: "Normal" }
+    ];
+
+    // Validate NIC format
+    function isValidNIC(nic) {
+        const nicRegex = /^[0-9]{9}[Vv]$|^[0-9]{12}$/;
+        return nicRegex.test(nic);
+    }
+
+    // Populate health reports table
+    function loadHealthReports() {
+        const tbody = document.querySelector("#health-reports-table tbody");
+        tbody.innerHTML = "";
+        healthReports.forEach(report => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                    <td>${report.nic}</td>
+                    <td>${report.bp}</td>
+                    <td>${report.weight}</td>
+                    <td>${report.diseases}</td>
+                    <td>${report.status}</td>
+                    <td><button class="btn" onclick="selectDonor('${report.nic}')">Review</button></td>
+                `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // Select donor for review
+    function selectDonor(nic) {
+        const donorNicInput = document.getElementById("donor-nic");
+        donorNicInput.value = nic;
+        document.getElementById("donor-nic-error").style.display = "none";
+    }
+
+    // Submit doctor decision
+    function submitDecision() {
+        const nic = document.getElementById("donor-nic").value.trim();
+        const decision = document.getElementById("decision").value;
+        const notes = document.getElementById("doctor-notes").value.trim();
+        const nicError = document.getElementById("donor-nic-error");
+        const notesError = document.getElementById("doctor-notes-error");
+
+        // Reset error messages
+        nicError.style.display = "none";
+        notesError.style.display = "none";
+
+        // Validate inputs
+        if (!nic) {
+            nicError.textContent = "Donor NIC is required.";
+            nicError.style.display = "block";
+            return;
         }
+
+        if (!isValidNIC(nic)) {
+            nicError.textContent = "Please enter a valid NIC (e.g., 123456789V or 123456789012).";
+            nicError.style.display = "block";
+            return;
+        }
+
+        if (notes.length > 500) {
+            notesError.style.display = "block";
+            return;
+        }
+
+        // Update health report
+        const report = healthReports.find(r => r.nic === nic);
+        if (report) {
+            report.status = decision;
+            report.notes = notes;
+            alert(`Decision for ${nic}: ${decision}\nNotes: ${notes || 'None'}`);
+            loadHealthReports();
+        } else {
+            nicError.textContent = "Donor not found.";
+            nicError.style.display = "block";
+            return;
+        }
+
+        // Clear form
+        document.getElementById("donor-nic").value = "";
+        document.getElementById("decision").value = "Approve";
+        document.getElementById("doctor-notes").value = "";
     }
 
-    function getData() {
-        return JSON.parse(localStorage.getItem('bloodLinkData'));
-    }
+    // Search donor history
+    function searchDonor() {
+        const nic = document.getElementById("search-nic").value.trim();
+        const profileDiv = document.getElementById("donor-profile");
+        const nicError = document.getElementById("search-nic-error");
 
-    function saveData(data) {
-        localStorage.setItem('bloodLinkData', JSON.stringify(data));
-    }
+        // Reset error message
+        nicError.style.display = "none";
 
-    // Dashboard specific
-    initData();
-    let data = getData();
+        // Validate NIC
+        if (!nic) {
+            nicError.textContent = "Donor NIC is required.";
+            nicError.style.display = "block";
+            return;
+        }
 
-    function renderPending() {
-        const tbody = document.querySelector('#pendingTable tbody');
-        tbody.innerHTML = '';
-        const currentDate = new Date('2025-08-21'); // Using given current date
-        data.appointments.filter(appt => appt.status === 'pending' && new Date(appt.date) >= currentDate).forEach(appt => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                    <td>${appt.donorName}</td>
-                    <td>${appt.bloodType}</td>
-                    <td>${appt.date}</td>
-                    <td>
-                        <button class="btn btn-sm btn-success approve" data-id="${appt.id}">Approve</button>
-                        <button class="btn btn-sm btn-danger reject" data-id="${appt.id}">Reject</button>
-                    </td>
+        if (!isValidNIC(nic)) {
+            nicError.textContent = "Please enter a valid NIC (e.g., 123456789V or 123456789012).";
+            nicError.style.display = "block";
+            return;
+        }
+
+        const donorReports = healthReports.filter(r => r.nic === nic);
+        const donorHistory = donationHistory.filter(h => h.nic === nic);
+
+        let html = `<h3>Donor Profile: ${nic}</h3>`;
+
+        // Health Reports
+        html += "<h4>Past Health Reports</h4>";
+        if (donorReports.length > 0) {
+            html += `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Blood Pressure</th>
+                                <th>Weight</th>
+                                <th>Diseases</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                 `;
-            tbody.appendChild(tr);
-        });
-    }
+            donorReports.forEach(report => {
+                html += `
+                        <tr>
+                            <td>${report.bp}</td>
+                            <td>${report.weight}</td>
+                            <td>${report.diseases}</td>
+                            <td>${report.status}</td>
+                            <td>${report.notes || 'None'}</td>
+                        </tr>
+                    `;
+            });
+            html += "</tbody></table>";
+        } else {
+            html += "<p>No health reports found.</p>";
+        }
 
-    function renderDonorProfiles() {
-        const container = document.getElementById('donorProfiles');
-        container.innerHTML = '';
-        data.donors.forEach(donor => {
-            const div = document.createElement('div');
-            div.className = 'mb-3';
-            div.innerHTML = `
-                    <h5>${donor.name}</h5>
-                    <p>View health reports, history, and add notes.</p>
-                    <button class="btn btn-primary view-profile" data-name="${donor.name}">View Profile</button>
+        // Donation History
+        html += "<h4>Donation History</h4>";
+        if (donorHistory.length > 0) {
+            html += `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Blood Type</th>
+                                <th>Volume</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                 `;
-            container.appendChild(div);
-        });
+            donorHistory.forEach(donation => {
+                html += `
+                        <tr>
+                            <td>${donation.date}</td>
+                            <td>${donation.type}</td>
+                            <td>${donation.volume}</td>
+                            <td>${donation.notes}</td>
+                        </tr>
+                    `;
+            });
+            html += "</tbody></table>";
+        } else {
+            html += "<p>No donation history found.</p>";
+        }
+
+        profileDiv.innerHTML = html;
     }
 
-    function populateDonorSelect() {
-        const select = document.getElementById('donorSelect');
-        data.donors.forEach(donor => {
-            const option = document.createElement('option');
-            option.value = donor.name;
-            option.textContent = donor.name;
-            select.appendChild(option);
-        });
+    // Logout function
+    function logout() {
+        // Simulate logout (replace with actual logout logic, e.g., clearing session or redirecting)
+        alert("You have been logged out.");
+        window.location.href = "frontpage.html"; // Redirect to login page
     }
 
-    renderPending();
-    renderDonorProfiles();
-    populateDonorSelect();
+    // Initialize page
+    document.addEventListener("DOMContentLoaded", () => {
+        loadHealthReports();
 
-    // Event listeners
-    document.querySelectorAll('.approve').forEach(btn => {
-        btn.addEventListener('click', e => {
-            const id = parseInt(e.target.dataset.id);
-            const appt = data.appointments.find(a => a.id === id);
-            appt.status = 'approved';
-            saveData(data);
-            renderPending();
+        // Handle form submission on Enter key
+        document.getElementById("donor-nic").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") submitDecision();
         });
-    });
 
-    document.querySelectorAll('.reject').forEach(btn => {
-        btn.addEventListener('click', e => {
-            const id = parseInt(e.target.dataset.id);
-            const reason = prompt('Enter rejection reason:');
-            if (reason) {
-                const appt = data.appointments.find(a => a.id === id);
-                appt.status = 'rejected';
-                appt.reason = reason;
-                saveData(data);
-                renderPending();
-            }
-        });
-    });
-
-    document.getElementById('notesForm').addEventListener('submit', e => {
-        e.preventDefault();
-        const donorName = document.getElementById('donorSelect').value;
-        const note = document.getElementById('notes').value;
-        const donor = data.donors.find(d => d.name === donorName);
-        donor.notes.push(note);
-        saveData(data);
-        alert('Note saved!');
-        document.getElementById('notes').value = '';
-    });
-
-    // GSAP animation
-    document.querySelectorAll('.blood-drop').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            gsap.to(el, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1 });
-        });
-    });
-
-    // View profile (simple alert for now)
-    document.querySelectorAll('.view-profile').forEach(btn => {
-        btn.addEventListener('click', e => {
-            const name = e.target.dataset.name;
-            const donor = data.donors.find(d => d.name === name);
-            alert(`Profile: ${name}\nBlood Type: ${donor.bloodType}\nNotes: ${donor.notes.join(', ')}`);
+        document.getElementById("search-nic").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") searchDonor();
         });
     });
 </script>
